@@ -32,6 +32,14 @@
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
     <script type="text/babel">
+        // Explicitly ensure React and ReactDOM are available in this scope
+        // This is crucial when using @babel/standalone for in-browser transpilation
+        const React = window.React;
+        const ReactDOM = window.ReactDOM;
+
+        // Destructure React hooks after React is confirmed to be available
+        const { useState, useEffect, useMemo } = React;
+
         // Helper function to generate a date string for a given Date object
         const formatDateForDisplay = (dateObj) => {
           return dateObj.toLocaleDateString('en-US', { year: 'numeric', month: 'short' });
@@ -55,11 +63,13 @@
         };
 
         const App = () => {
+          // Add a console log to check if the App component is being rendered
+          console.log("App component is rendering!");
+
           const [assetData, setAssetData] = useState([]);
           const [relativePerformance, setRelativePerformance] = useState([]);
 
-          // Raw CSV data from the uploaded files
-          // These will be populated by the file_content_fetcher tool
+          // Raw CSV data for Gold from the uploaded a.cvs.txt file
           const rawGoldCsv = `Date,Closing Price
 1999-12-31,288.25
 2000-01-31,310.25
@@ -679,7 +689,6 @@
 2025-05-31,6220.00
 2025-06-30,6204.95
 2025-07-01,6177.97`;
-
 
           useEffect(() => {
             const goldParsed = parseCsvData(rawGoldCsv);
